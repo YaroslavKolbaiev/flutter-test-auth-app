@@ -7,6 +7,10 @@ import 'dart:convert';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+
+  // Debug: Print loaded environment variables
+  print('Loaded WEBVIEW_URL: ${dotenv.env['WEBVIEW_URL']}');
+
   runApp(const MyApp());
 }
 
@@ -68,9 +72,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               };
             ''');
-          },
-          onWebResourceError: (WebResourceError error) {
+          },          onWebResourceError: (WebResourceError error) {
             print('WebView error: ${error.description}');
+            print('Error code: ${error.errorCode}');
+            print('Error type: ${error.errorType}');
+
+            // Show user-friendly error message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Failed to load webpage: ${error.description}'),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 5),
+              ),
+            );
           },
         ),
       )
@@ -93,9 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (authData['type'] == 'AUTH_SUCCESS') {
         final data = authData['data'];
-        final authToken = data['auth_token'];
-        final userId = data['user_id'];
-        final availableDomain = data['available_domain'];
+        final authToken = data['auth_token']?.toString();
+        final userId = data['user_id']?.toString();
+        final availableDomain = data['available_domain']?.toString();
         final disableLogout = data['disable_logout'];
 
         // Close the WebView by navigating back to home
@@ -110,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // Show success message on home view
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Login successful for user: $userId token: $authToken'),
+            content: Text('Login successful for user: $userId'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 5),
           ),
@@ -158,6 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
+    final webviewUrl = dotenv.env['WEBVIEW_URL'] ?? 'https://flutter.dev';
+    print('Loading WebView URL: $webviewUrl');
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -171,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           body: WebViewWidget(
-            controller: _controller!..loadRequest(Uri.parse(dotenv.env['WEBVIEW_URL'] ?? 'https://flutter.dev')),
+            controller: _controller!..loadRequest(Uri.parse(webviewUrl)),
           ),
         ),
       ),
