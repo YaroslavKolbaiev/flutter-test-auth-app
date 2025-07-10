@@ -1,0 +1,11 @@
+include: package:flutter_lints/flutter.yaml
+
+# Additional rules can be added here
+linter:
+  rules:
+    # Avoid print calls in production code
+    avoid_print: false
+    # Prefer const constructors
+    prefer_const_constructors: true
+    # Use key in widget constructors
+    use_key_in_widget_constructors: true
