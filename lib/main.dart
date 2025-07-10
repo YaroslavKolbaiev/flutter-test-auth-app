@@ -222,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 20),
             const Text(
-              'This app opens your React app in a mobile WebView',
+              'This app opens GameConnect app in a mobile WebView',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -283,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton.icon(
                 onPressed: _openWebView,
                 icon: const Icon(Icons.phone_android),
-                label: const Text('Open Mobile WebView'),
+                label: const Text('Open GameConnect'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   foregroundColor: Colors.white,
